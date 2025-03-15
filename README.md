@@ -6,7 +6,7 @@ This crate implements a Rust interface to the Kobuki robot base.
 The protocol for the robot is described in the [appendix of the Kobuki driver documentation](https://yujinrobot.github.io/kobuki/enAppendixProtocolSpecification.html).
 
 
-## Running the example
+## Running the examples
 
 The computer running the example needs to be connected to the Kobuki base using a USB cable. The Kobuki base should be powered on. To make it easier to find the USB device, you can add the following udev rule to your host system.
 
