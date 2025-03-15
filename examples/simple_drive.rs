@@ -14,14 +14,14 @@ async fn main() -> Result<()> {
     let d = ByteStream::builder()
         .subpayload(commands::BaseControl::new(100, 100))
         .to_bytes();
-    port.write(&d)?;
+    let _ = port.write(&d)?;
 
     sleep(Duration::from_secs(2)).await;
 
     let d = ByteStream::builder()
         .subpayload(commands::BaseControl::new(0, 0))
         .to_bytes();
-    port.write(&d)?;
+    let _ = port.write(&d)?;
 
     Ok(())
 }
