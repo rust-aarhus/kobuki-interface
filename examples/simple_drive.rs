@@ -17,8 +17,6 @@ async fn main() -> Result<()> {
         .open_native_async()?;
     let serial = SerialPortHandler::new(port);
 
-    sleep(Duration::from_secs(1)).await;
-
     // Notice that the base control needs to be set regularly to keep the robot moving
     for _ in 0..10 {
         serial
