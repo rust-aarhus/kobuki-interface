@@ -1,5 +1,5 @@
 pub struct ByteStream {
-    subpayloads: Vec<Box<dyn ToSubPayload>>,
+    subpayloads: Vec<Box<dyn ToSubPayload + Send + Sync>>,
 }
 
 pub trait ToSubPayload {
@@ -13,7 +13,7 @@ impl ByteStream {
         }
     }
 
-    pub fn subpayload(mut self, subpayload: Box<dyn ToSubPayload>) -> Self {
+    pub fn subpayload(mut self, subpayload: Box<dyn ToSubPayload + Send + Sync>) -> Self {
         self.subpayloads.push(subpayload);
         self
     }
