@@ -39,7 +39,7 @@ async fn main() -> Result<()> {
     for (note, duration) in &song {
         let duration = Duration::from_millis(*duration / 2);
         let mut bs = ByteStream::builder();
-        bs = bs.subpayload(commands::Sound::new(*note, duration));
+        bs = bs.subpayload(commands::Sound::new(*note as f32, duration));
         serial.send_command(bs).await?;
         tokio::time::sleep(duration).await;
     }
