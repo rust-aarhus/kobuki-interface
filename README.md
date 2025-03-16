@@ -20,7 +20,7 @@ Run the example with the following command:
 cargo run --example simple_drive
 ```
 
-When the connection is established, you should hear the Kobuki base play a sound and the base should start moving for a couple of seconds.
+When the connection is established, you should hear the Kobuki base play a sound and the base should start moving for a few seconds.
 
 
 ## Credits

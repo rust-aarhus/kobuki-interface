@@ -1,10 +1,14 @@
 use anyhow::Result;
-use kobuki_interface::tx::{ByteStream, commands};
+use kobuki_interface::{
+    serial_port::SerialPortHandler,
+    tx::{ByteStream, commands},
+};
 use std::time::Duration;
 use tokio_serial::SerialPortBuilderExt;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    env_logger::init();
     println!("Singing a song...");
 
     let song = [
@@ -27,17 +31,16 @@ async fn main() -> Result<()> {
         (523, 400),
     ];
 
-    let mut port = tokio_serial::new("/dev/kobuki", 115200)
+    let port = tokio_serial::new("/dev/kobuki", 115200)
         .timeout(Duration::from_millis(1024))
         .open_native_async()?;
+    let serial = SerialPortHandler::new(port);
 
     for (note, duration) in &song {
         let duration = Duration::from_millis(*duration / 2);
         let mut bs = ByteStream::builder();
         bs = bs.subpayload(commands::Sound::new(*note, duration));
-        let d = bs.to_bytes();
-        port.writable().await?;
-        let _ = port.try_write(&d)?;
+        serial.send_command(bs).await?;
         tokio::time::sleep(duration).await;
     }
 

@@ -1,18 +1,18 @@
 use anyhow::Result;
-use kobuki_interface::rx::Receiver;
+use kobuki_interface::serial_port::SerialPortHandler;
 use std::time::Duration;
 use tokio_serial::SerialPortBuilderExt;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    env_logger::init();
     println!("Decoding feedback messages...");
 
     let port = tokio_serial::new("/dev/kobuki", 115200)
         .timeout(Duration::from_millis(1024))
         .open_native_async()?;
-
-    let receiver = Receiver::new(port);
-    let mut rx = receiver.subscribe();
+    let serial = SerialPortHandler::new(port);
+    let mut rx = serial.subscribe();
 
     loop {
         let feedback = rx.recv().await?;
