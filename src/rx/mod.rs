@@ -4,5 +4,7 @@ mod feedback;
 mod feedback_decoder;
 mod inertial_sensor;
 
+pub use docking_ir::{DockingIr, IrSignal};
 pub use feedback::Feedback;
 pub use feedback_decoder::FeedbackDecoder;
+pub use inertial_sensor::InertialSensor;
