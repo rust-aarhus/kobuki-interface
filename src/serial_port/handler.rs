@@ -1,12 +1,12 @@
-use std::io::ErrorKind;
-
 use crate::{
     rx::{Feedback, FeedbackDecoder},
-    tx::ByteStream,
+    tx::{ByteStream, commands},
 };
 use log::error;
+use std::io::ErrorKind;
 use tokio::{
     io::AsyncReadExt,
+    signal,
     sync::{broadcast, mpsc},
     task::JoinHandle,
 };
@@ -79,8 +79,15 @@ impl SerialPortTask {
                 size = port.read_buf(&mut buf) => {
                     Self::handle_read(size?, &mut buf, &mut decoder, &feedback_tx)?;
                 }
+                _ = signal::ctrl_c() => {
+                    break;
+                }
             }
         }
+
+        let stop_cmd = ByteStream::builder().subpayload(commands::BaseControl::new(0, 0));
+        Self::handle_command(Some(stop_cmd), &mut port).await?;
+        Ok(())
     }
 
     async fn handle_command(
